@@ -3,6 +3,8 @@ import UploadZone from "./components/UploadZone"
 import ResultCard from "./components/ResultCard"
 import ProbChart from "./components/ProbChart"
 import DiseaseInfo from "./components/DiseaseInfo"
+import logo from "./assets/LogoMangoCuadrado.png" 
+import "./index.css"
 
 export default function App() {
   const [resultado, setResultado] = useState(null)
@@ -15,10 +17,7 @@ export default function App() {
     const form = new FormData()
     form.append("file", archivo)
     try {
-      const res = await fetch("/api/predecir", {
-        method: "POST",
-        body: form
-      })
+      const res = await fetch("/api/predecir", { method: "POST", body: form })
       const data = await res.json()
       setResultado(data)
     } catch (e) {
@@ -28,26 +27,25 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-green-50">
-      <nav className="bg-green-900 px-6 py-3 flex items-center gap-3">
-        <div className="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center text-white font-bold">M</div>
+    <div>
+      <nav>
+        <img 
+          src={logo} 
+          alt="MangoScan logo" 
+          style={{ height: "40px", width: "auto", borderRadius: "6px" }} 
+        />
         <div>
-          <p className="text-white font-medium text-sm">MangoScan</p>
-          <p className="text-green-300 text-xs">Detección de enfermedades · UdeC Facatativá</p>
+          <p className="nav-title">Mango</p>
+          <p className="nav-sub">Deteccion de enfermedades · UdeC Facatativa</p>
         </div>
       </nav>
-
-      <div className="max-w-5xl mx-auto p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="main">
         <UploadZone onAnalizar={analizar} cargando={cargando} preview={preview} />
         {resultado && (
           <>
             <ResultCard resultado={resultado} />
-            <div className="md:col-span-2">
-              <ProbChart probabilidades={resultado.probabilidades} />
-            </div>
-            <div className="md:col-span-2">
-              <DiseaseInfo info={resultado.info} clase={resultado.clase} />
-            </div>
+            <div className="full"><ProbChart probabilidades={resultado.probabilidades} /></div>
+            <div className="full"><DiseaseInfo info={resultado.info} /></div>
           </>
         )}
       </div>
